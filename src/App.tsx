@@ -6,7 +6,7 @@ import Payments from "./Payments";
 import type { ApiClient } from "./apiClient";
 import { ShopProvider } from "./ShopContext";
 
-export default function App({ api }: { api: ApiClient }) {
+export default function App({ api }: Readonly<{ api: Readonly<ApiClient> }>) {
   return (
     <ShopProvider api={api}>
       <div>

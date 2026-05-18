@@ -9,10 +9,10 @@ type Row = {
 export default function ItemTable({
   rows,
   isForBasket = false,
-}: {
-  rows: Row[];
-  isForBasket?: boolean;
-}) {
+}: Readonly<{
+  rows: Readonly<Row[]>;
+  isForBasket?: Readonly<boolean>;
+}>) {
   if (!rows || rows.length === 0) return <div>No items.</div>;
   return (
     <table>
@@ -31,7 +31,7 @@ export default function ItemTable({
             <td>{r.id}</td>
             <td>{r.name}</td>
             <td>{r.description ?? "-"}</td>
-            <td>{r.priceCents != null ? `$${(r.priceCents / 100).toFixed(2)}` : "-"}</td>
+            <td>{r.priceCents == null ? "-" : `$${(r.priceCents / 100).toFixed(2)}` }</td>
             <td>{r.inStockOrQuantity}</td>
           </tr>
         ))}

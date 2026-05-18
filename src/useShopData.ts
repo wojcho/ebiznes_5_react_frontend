@@ -1,7 +1,7 @@
 import { useState, useCallback, useEffect } from "react";
 import { ApiClient, type User, type Product, type BasketItem } from "./apiClient";
 
-export function useShopData(api: ApiClient) {
+export function useShopData(api: Readonly<ApiClient>) {
   // Shared state
   const [selectedUserId, setSelectedUserId] = useState<number | null>(null);
   const [users, setUsers] = useState<User[]>([]);

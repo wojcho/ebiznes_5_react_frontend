@@ -4,7 +4,7 @@ import type { ApiClient } from "./apiClient";
 
 const ShopContext = createContext<ReturnType<typeof useShopData> | null>(null);
 
-export function ShopProvider({ api, children }: { api: ApiClient; children: ReactNode }) {
+export function ShopProvider({ api, children }: Readonly<{ api: Readonly<ApiClient>; children: Readonly<ReactNode> }>) {
   const shopData = useShopData(api);
   return <ShopContext.Provider value={shopData}>{children}</ShopContext.Provider>;
 }

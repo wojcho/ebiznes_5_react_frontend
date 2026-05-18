@@ -50,8 +50,8 @@ export type PaymentResponse = {
 };
 
 type FetchOptions = {
-  baseUrl?: string;
-  defaultHeaders?: Record<string, string>;
+  baseUrl?: Readonly<string>;
+  defaultHeaders?: Readonly<Record<string, string>>;
 };
 
 export class ApiError extends Error {
@@ -65,12 +65,17 @@ export class ApiError extends Error {
 }
 
 export class ApiClient {
-  private baseUrl: string;
-  private defaultHeaders: Record<string, string>;
-  private client: AxiosInstance;
+  private readonly baseUrl: Readonly<string>;
+  private readonly defaultHeaders: Record<string, string>;
+  private readonly client: AxiosInstance;
 
   constructor(options?: FetchOptions) {
-    this.baseUrl = options?.baseUrl?.replace(/\/+$/, "") ?? "";
+    this.baseUrl = (() => {
+      const s = options?.baseUrl ?? "";
+      let i = s.length;
+      while (i > 0 && s.charAt(i - 1) === "/") i--;
+      return s.slice(0, i);
+    })();
     this.defaultHeaders = options?.defaultHeaders ?? {
       "Content-Type": "application/json",
     };
@@ -91,13 +96,13 @@ export class ApiClient {
         url: path,
         method,
         data: body === undefined ? undefined : body,
-        headers: { ...(headers ?? {}) },
+        headers: { ...headers },
         validateStatus: () => true, // handle errors manually to create ApiError with body
       });
 
       // axios will parse JSON automatically; resp.data may be string or object depending on server
       if (resp.status >= 200 && resp.status < 300) {
-        return resp.data as T;
+        return resp.data;
       } else {
         // include parsed body if available
         throw new ApiError(

@@ -8,14 +8,17 @@ export default function UserSelector() {
   const handleChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
     const id = e.target.value ? Number(e.target.value) : null;
     setSelectedUserId(id);
-    if (id !== null) navigate(`/users/${id}`);
-    else navigate("/users");
+    if (id == null) {
+      navigate("/users");
+    } else {
+      navigate(`/users/${id}`);
+    }
   };
 
   return (
     <div>
       <label>
-        User:
+        {"User: "}
         <select value={selectedUserId ?? ""} onChange={handleChange}>
           <option value="">Select User</option>
           {users.map((u) => (
